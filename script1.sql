@@ -5,13 +5,14 @@ CREATE TABLE IF NOT EXISTS Types (
 
 CREATE TABLE IF NOT EXISTS Article (
   articleID INT NOT NULL PRIMARY KEY,
-  summary VARCHAR,
   content VARCHAR,
-  title VARCHAR,
   typeID INT NULL REFERENCES Types(typeID),
+  scrapedAt TIMESTAMP,
   insertedAt TIMESTAMP,
   lastUpdatedAt TIMESTAMP,
-  scrapedAt TIMESTAMP
+  title VARCHAR,
+  summary VARCHAR
+  
 );
 
 CREATE TABLE IF NOT EXISTS Keyword (

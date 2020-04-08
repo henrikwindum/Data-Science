@@ -4,7 +4,9 @@ import psycopg2
 
 # Read dataset
 data = pd.read_csv("news_sample.csv", encoding='utf-8')
-data['content'] = data['content'].astype('str')
+data['content'] = data['content'].str.strip().str.normalize('NFC')
+data['title'] = data['title'].str.strip().str.normalize('NFC')
+
 # Make connection to database
 connection = psycopg2.connect(
     user = "athanar",
@@ -27,15 +29,10 @@ def executeScriptsFromFile(filename):
     fd = open(filename, 'r')
     sqlFile = fd.read()
     fd.close()
-
     # all SQL commands (split on ';')
     sqlCommands = sqlFile.split(';')
-
     # Execute every command from the input file
     for command in sqlCommands:
-        # This will skip and report errors
-        # For example, if the tables do not yet exist, this will skip over
-        # the DROP TABLE commands
         try:
             cursor.execute(command)
         except:
@@ -48,14 +45,19 @@ def insertTable(cols, values, target):
     for i,row in values.iterrows():
         sql = u"INSERT INTO "+target+" (" +cols + ") VALUES (" + "%s,"*(len(row)-1) + "%s)"
         cursor.execute(sql, tuple(row))
+    
     connection.commit()
+    
 
 types = data.iloc[:,[3]].drop_duplicates()
 typeval = "typeValue"
 insertTable(typeval, types, "Types")
 
-article = data.loc[:,['id', 'summary', 'content', 'title', 'inserted_at', 'updated_at', 'scaped_at']]
-articleinfo = "articleID, summary, content, title, insertedAt, lastUpdatedAt, scrapedAt"
+article = data.iloc[:,[1, 5, 6, 7, 8, 9, 15]]
+articleinfo = "articleID, content, scrapedAt, insertedAt, lastUpdatedAt, title, summary"
 insertTable(articleinfo, article, "Article")
-
-
+print(article.iloc[0])
+cursor.execute("SELECT * from Article where articleID = 141;")
+print(cursor.fetchall())
+cursor.close()
+connection.close()
