@@ -1,26 +1,26 @@
 CREATE TABLE IF NOT EXISTS Types (
   typeID SERIAL PRIMARY KEY,
-  typeValue VARCHAR NOT NULL
+  typeValue VARCHAR NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Article (
   articleID INT NOT NULL PRIMARY KEY,
-  summary VARCHAR NULL,
-  content VARCHAR NULL,
-  title VARCHAR NULL,
-  typeID INT REFERENCES Types(typeID),
-  createdAt TIMESTAMP,
+  summary VARCHAR,
+  content VARCHAR,
+  title VARCHAR,
+  typeID INT NULL REFERENCES Types(typeID),
   insertedAt TIMESTAMP,
+  lastUpdatedAt TIMESTAMP,
   scrapedAt TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS Keyword (
   keywordID SERIAL PRIMARY KEY,
-  keywordvalue VARCHAR NULL,
+  keywordvalue VARCHAR NULL
 );
 
 CREATE TABLE IF NOT EXISTS Tags (
-  keywordID INT REFERENCES Keyword(keywordID)
+  keywordID INT REFERENCES Keyword(keywordID),
   articleID INT REFERENCES Article(articleID)
 );
 
@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS Urls (
   articleID INT REFERENCES Article(articleID),
   domain VARCHAR(45) NULL,
   source VARCHAR(45) NULL,
+  metaDescription VARCHAR NULL,
+  metaKeywords VARCHAR NULL
 );
 
 CREATE TABLE IF NOT EXISTS Author (
