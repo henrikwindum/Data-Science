@@ -1,37 +1,42 @@
+CREATE TABLE IF NOT EXISTS Article (
+  articleID INT NOT NULL PRIMARY KEY,
+  title VARCHAR NULL,
+  content VARCHAR NULL,
+  summary VARCHAR NULL,
+  scrapedAt TIMESTAMP,
+  insertedAt TIMESTAMP,
+  updatedAt TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS Types (
   typeID SERIAL PRIMARY KEY,
   typeValue VARCHAR NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS Article (
-  articleID INT NOT NULL PRIMARY KEY,
-  content VARCHAR,
-  typeID INT NULL REFERENCES Types(typeID),
-  scrapedAt TIMESTAMP,
-  insertedAt TIMESTAMP,
-  lastUpdatedAt TIMESTAMP,
-  title VARCHAR,
-  summary VARCHAR
-  
+CREATE TABLE IF NOT EXISTS Typelinks (
+  articleID INT REFERENCES Article(articleID),
+  typeID INT REFERENCES Types(typeID)
 );
 
 CREATE TABLE IF NOT EXISTS Keyword (
   keywordID SERIAL PRIMARY KEY,
-  keywordvalue VARCHAR NULL
+  keywordValue VARCHAR NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Tags (
-  keywordID INT REFERENCES Keyword(keywordID),
-  articleID INT REFERENCES Article(articleID)
+  articleID INT REFERENCES Article(articleID),
+  keywordID INT REFERENCES Keyword(keywordID)  
 );
 
-CREATE TABLE IF NOT EXISTS Urls (
-  urlstring VARCHAR PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Domain (
+  domainID SERIAL PRIMARY KEY,
+  domainURL VARCHAR NULL
+);
+
+CREATE TABLE IF NOT EXISTS Webpage (
   articleID INT REFERENCES Article(articleID),
-  domain VARCHAR(45) NULL,
-  source VARCHAR(45) NULL,
-  metaDescription VARCHAR NULL,
-  metaKeywords VARCHAR NULL
+  domainID INT REFERENCES Domain(domainID),
+  webpageURL VARCHAR NULL
 );
 
 CREATE TABLE IF NOT EXISTS Author (
