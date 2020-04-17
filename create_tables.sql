@@ -1,3 +1,7 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO athanar, postgres;
+
 CREATE TABLE IF NOT EXISTS Article (
   articleID INT NOT NULL PRIMARY KEY,
   title VARCHAR NULL,
