@@ -1,0 +1,18 @@
+Our first priority, when creating our schema was to avoid redundancies of the same element several times, e.g., types and domains.
+For example, if we had the element called "Type Name" in the article entity-set, each type name would appear has many times as articles linked to that specific type. 
+We have avoided this by assigning the Domain, Types, Keywords and Authors to each of their own entity-sets.
+
+Even though typeValue is a unique element in the Type entity-set, we stil have chosen to create an identifier called typeID. 
+Each TypeID is linked to each of the different typeValues.  
+This ID is used as a primary key, as it is created to simplify and speed up our search when queuing for data in our database. 
+This now makes it possible to find all articles with a specific typeID by using the arithmatic functionality of SQL. 
+The entities keywordID, authorID and domainID has been created with the same reasoning. 
+As a bonus we get a much more colum-stored dataset wich do much less I/O.
+ 
+Furhtermore, we have also implemented some tables that only contain foreign keys between some entity-sets.  
+This has made it a lot easier to both create the database and search through entitiy-sets. 
+
+The only entity in the whole scema that only appears once is the articleID. The articleID may be connected to a certain domain, but that domain contians countles URL's and might be coupled
+to many different articleID's. Same principle goes for types, authors and keywords, where these have been created without duplicates. By doing this we have avoided a lot of memory usage
+and therefore avoided redundancies.
+
